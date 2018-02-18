@@ -1,0 +1,8 @@
+apiVersion: v1
+name: ambassador
+version: 0.26.0
+description: Helm chart for Ambassador
+keywords:
+  - ambassador
+sources:
+  - http://github.com/datawire/ambassador

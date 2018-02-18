@@ -1,0 +1,65 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "chart.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.ambassador.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "ambassador.fullname" . }}
+spec:
+  replicas: {{ .Values.ambassador.replicaCount }}
+  template:
+    metadata:
+    {{- if .Values.ambassador.podAnnotations }}
+      annotations:
+{{ toYaml .Values.ambassador.podAnnotations | indent 8 }}
+    {{- end }}
+      labels:
+        app: {{ template "chart.name" . }}
+        component: {{ .Values.ambassador.name }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ if .Values.rbac.create }}{{ template "ambassador.fullname" . }}{{ else }}{{ .Values.ambassador.serviceAccountName }}{{ end }}
+      containers:
+      - name: {{ template "chart.name" . }}-{{ .Values.ambassador.name }}
+        image: {{ .Values.ambassador.image.repository }}:{{ .Values.ambassador.image.tag }}
+        resources:
+          limits:
+            cpu: 1
+            memory: 400Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        env:
+        - name: AMBASSADOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace  
+        {{- range $key, $value := .Values.ambassador.extraEnv }}
+        - name: {{ $key }}
+          value: {{ $value }}
+        {{- end }}
+        args:
+        {{- range $key, $value := .Values.ambassador.extraArgs }}
+        - --{{ $key }}={{ $value }}
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /ambassador/v0/check_alive
+            port: 8877
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ambassador/v0/check_ready
+            port: 8877
+          initialDelaySeconds: 3
+          periodSeconds: 3
+    {{- if .Values.ambassador.enableStatsd }}
+      - name: statsd
+        image: quay.io/datawire/statsd:0.26.0
+    {{- end }}
+      restartPolicy: Always

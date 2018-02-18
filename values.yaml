@@ -1,0 +1,62 @@
+  ## Install Default RBAC roles and bindings
+rbac:
+  create: false
+
+ambassador:
+  # Ambassador container name
+  name: ambassador
+
+  # Defines the serviceAccountName to use when `rbac.create=false`
+  serviceAccountName: default
+
+  # Ambassador container image
+  image:
+    repository: quay.io/datawire/ambassador
+    tag: 0.26.0
+    pullPolicy: IfNotPresent
+  
+  # Additional Ambassador container arguments
+  extraArgs: {}
+
+  # Additional Ambassador container enviroment variables
+  extraEnv: {}
+
+  ## Node tolerations for Ambassador scheduling to nodes with taints
+  tolerations: []
+    # - key: "key"
+    #   operator: "Equal|Exists"
+    #   value: "value"
+    #   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  nodeSelector: {}
+  
+  ## Annotations to be added to ambassador pods
+  podAnnotations: {}
+
+  replicaCount: 3
+
+  ## Ambassador resource requests and limits
+  resources: 
+     limits:
+       cpu: 1
+       memory: 400Mi
+     requests:
+       cpu: 200m
+       memory: 100Mi
+
+  # Add statsd sidebar container to Ambassador pod
+  enableStatsd: true
+
+  service:
+    annotations: {}
+    labels: {}
+    clusterIP: ""
+
+    ## List of IP addresses at which the Ambassador service is available
+    externalIPs: []
+
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    # nodePort: 30000
+    type: LoadBalancer
