@@ -45,7 +45,12 @@ ambassador:
        memory: 100Mi
 
   # Add statsd sidebar container to Ambassador pod
-  enableStatsd: true
+  statsd:
+    enabled: true
+    image:
+      repository: quay.io/datawire/statsd
+      tag: 0.26.0
+      pullPolicy: IfNotPresent
 
   service:
     annotations: {}

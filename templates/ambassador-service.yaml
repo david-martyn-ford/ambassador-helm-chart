@@ -42,7 +42,7 @@ spec:
     - name: http
       port: {{ .Values.ambassador.service.servicePort }}
       protocol: TCP
-      targetPort: 8877
+      targetPort: 80
     {{- if .Values.ambassador.service.nodePort }}
       nodePort: {{ .Values.ambassador.service.nodePort }}
     {{- end }}

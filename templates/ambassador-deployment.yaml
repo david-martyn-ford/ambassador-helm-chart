@@ -58,8 +58,8 @@ spec:
             port: 8877
           initialDelaySeconds: 3
           periodSeconds: 3
-    {{- if .Values.ambassador.enableStatsd }}
+    {{- if .Values.ambassador.statsd.enabled }}
       - name: statsd
-        image: quay.io/datawire/statsd:0.26.0
+        image: {{ .Values.ambassador.statsd.image.repository }}:{{ .Values.ambassador.statsd.image.tag }}
     {{- end }}
       restartPolicy: Always
