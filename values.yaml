@@ -30,12 +30,12 @@ ambassador:
 
   nodeSelector: {}
   
-  ## Annotations to be added to ambassador pods
+  # Annotations to be added to ambassador pods
   podAnnotations: {}
 
   replicaCount: 3
 
-  ## Ambassador resource requests and limits
+  # Ambassador resource requests and limits
   resources: 
      limits:
        cpu: 1
@@ -55,9 +55,21 @@ ambassador:
   service:
     annotations: {}
     labels: {}
+
+    # Add ambassador config to service
+    ambassadorConfig: {}
+      # getambassador.io/config: |
+      # ---
+      # apiVersion: ambassador/v0
+      # kind:  Mapping
+      # name:  httpbin_mapping
+      # prefix: /httpbin/
+      # service: httpbin.org:80
+      # host_rewrite: httpbin.org
+
     clusterIP: ""
 
-    ## List of IP addresses at which the Ambassador service is available
+    # List of IP addresses at which the Ambassador service is available
     externalIPs: []
 
     loadBalancerIP: ""
