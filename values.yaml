@@ -44,7 +44,7 @@ ambassador:
        cpu: 200m
        memory: 100Mi
 
-  # Add statsd sidebar container to Ambassador pod
+  # Add statsd sidecar container to Ambassador pod
   statsd:
     enabled: true
     image:
