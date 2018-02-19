@@ -2,22 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v0
-      kind:  Mapping
-      name:  httpbin_mapping
-      prefix: /httpbin/
-      service: httpbin.org:80
-      host_rewrite: httpbin.org
 {{- if .Values.ambassador.service.annotations }}
+  annotations:
 {{ toYaml .Values.ambassador.service.annotations | indent 4 }}
 {{- end }}
   labels:
     app: {{ template "chart.name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: "{{ .Values.ambassador.name }}"
+    component: {{ .Values.ambassador.name }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   name: {{ template "ambassador.fullname" . }}    

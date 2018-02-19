@@ -4,7 +4,7 @@ rbac:
 
 ambassador:
   # Ambassador container name
-  name: ambassador
+  name: api-gateway
 
   # Defines the serviceAccountName to use when `rbac.create=false`
   serviceAccountName: default
@@ -54,18 +54,16 @@ ambassador:
 
   service:
     annotations: {}
-    labels: {}
-
-    # Add ambassador config to service
-    ambassadorConfig: {}
       # getambassador.io/config: |
-      # ---
-      # apiVersion: ambassador/v0
-      # kind:  Mapping
-      # name:  httpbin_mapping
-      # prefix: /httpbin/
-      # service: httpbin.org:80
-      # host_rewrite: httpbin.org
+        # ---
+        # apiVersion: ambassador/v0
+        # kind:  Mapping
+        # name:  httpbin_mapping
+        # prefix: /httpbin/
+        # service: httpbin.org:80
+        # host_rewrite: httpbin.org
+
+    labels: {}
 
     clusterIP: ""
 
